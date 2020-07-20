@@ -1,0 +1,43 @@
+<!--INICIO ********************************************************************************************* -->
+ <system.diagnostics>
+   <sources>
+     <source name="System.Net"  tracemode="protocolonly" maxdatasize="2048">
+       <listeners>
+         <add name="dhfLogWeb"/>
+       </listeners>
+     </source>
+     <source name="System.ServiceModel"
+             switchValue="Information, ActivityTracing"
+             propagateActivity="true" >
+       <listeners>
+         <add name="xml"/>
+       </listeners>
+     </source>
+     <source name="System.ServiceModel.MessageLogging">
+       <listeners>
+         <add name="messages"/>
+       </listeners>
+     </source>
+   </sources>
+   <switches>
+     <add name="System.Net" value="Verbose"/>
+     <add name="System.Net.Cache" value="Verbose"/>
+     <add name="System.Net.Http" value="Verbose"/>
+     <add name="System.Net.Sockets" value="Verbose"/>
+     <add name="System.Net.WebSockets" value="Verbose"/>
+   </switches>
+   <sharedListeners>
+     <add name="System.Net"
+       type="System.Diagnostics.TextWriterTraceListener"
+       initializeData="network.log"
+       traceOutputOptions="ProcessId, DateTime"/>
+     
+     <!--Debido a que se esta inspeccionando practicamente todas las operaciones, es bueno dividir en archivos, ver sobre todo dhf_web.svclog,
+     cambia el valor de "initializeData" a rutas de archivos de tu equipo, recuerda tener permisos para escribir.-->
+     <add name="dhfLogWeb" type="System.Diagnostics.TextWriterTraceListener"  initializeData="C:\logs\dhf_web.svclog"/>
+     <add name="MyConsole" type="System.Diagnostics.ConsoleTraceListener" />
+     <add name="xml" type="System.Diagnostics.XmlWriterTraceListener" initializeData="C:\logs\Traces.svclog" />
+     <add name="messages" type="System.Diagnostics.XmlWriterTraceListener" initializeData="C:\logs\Messages.svclog"/>
+   </sharedListeners>
+   <trace autoflush="true"/>
+ </system.diagnostics>
